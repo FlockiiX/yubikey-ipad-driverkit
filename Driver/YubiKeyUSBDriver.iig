@@ -1,0 +1,25 @@
+#ifndef YubiKeyUSBDriver_h
+#define YubiKeyUSBDriver_h
+
+#include <Availability.h>
+#include <DriverKit/IOService.iig>
+#include "DriverAPI.h"
+
+// Matches a YubiKey as a whole IOUSBHostDevice and performs eight-byte HID
+// Feature report transfers on its OTP interface for YubiKeyUSBDriverUserClient.
+class YubiKeyUSBDriver: public IOService
+{
+public:
+    virtual bool init(void) override;
+    virtual kern_return_t Start(IOService* provider) override;
+    virtual kern_return_t Stop(IOService* provider) override;
+    virtual void free(void) override;
+    virtual kern_return_t NewUserClient(uint32_t type, IOUserClient** userClient) override;
+
+    // Called by YubiKeyUSBDriverUserClient.
+    kern_return_t CopyDeviceInfo(YKUSBDeviceInfo* output) LOCALONLY;
+    kern_return_t GetFeatureReport(uint8_t output[kYKUSBFeatureReportSize]) LOCALONLY;
+    kern_return_t SetFeatureReport(const uint8_t input[kYKUSBFeatureReportSize]) LOCALONLY;
+};
+
+#endif /* YubiKeyUSBDriver_h */

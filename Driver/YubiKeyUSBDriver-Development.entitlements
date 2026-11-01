@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>com.apple.developer.driverkit</key>
+    <true/>
+    <!--
+    Development-only: mirrors the wildcard that the "DriverKit USB Transport
+    (development)" capability puts into a development provisioning profile.
+    Actual matching is still restricted to Yubico VID 0x1050 by the
+    IOKitPersonalities entry in Driver/Info.plist.
+    -->
+    <key>com.apple.developer.driverkit.transport.usb</key>
+    <array>
+        <dict>
+            <key>idVendor</key>
+            <string>*</string>
+        </dict>
+    </array>
+</dict>
+</plist>

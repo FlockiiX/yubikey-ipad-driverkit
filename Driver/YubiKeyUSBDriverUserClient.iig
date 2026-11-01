@@ -1,0 +1,34 @@
+#ifndef YubiKeyUSBDriverUserClient_h
+#define YubiKeyUSBDriverUserClient_h
+
+#include <Availability.h>
+#include <DriverKit/IOUserClient.iig>
+
+class YubiKeyUSBDriver;
+
+class YubiKeyUSBDriverUserClient: public IOUserClient
+{
+protected:
+    static kern_return_t StaticGetDeviceInfo(OSObject* target, void* reference, IOUserClientMethodArguments* arguments) LOCALONLY;
+    static kern_return_t StaticGetFeatureReport(OSObject* target, void* reference, IOUserClientMethodArguments* arguments) LOCALONLY;
+    static kern_return_t StaticSetFeatureReport(OSObject* target, void* reference, IOUserClientMethodArguments* arguments) LOCALONLY;
+
+    kern_return_t GetDeviceInfo(IOUserClientMethodArguments* arguments) LOCALONLY;
+    kern_return_t GetFeatureReport(IOUserClientMethodArguments* arguments) LOCALONLY;
+    kern_return_t SetFeatureReport(IOUserClientMethodArguments* arguments) LOCALONLY;
+
+public:
+    virtual bool init(void) override;
+    virtual kern_return_t Start(IOService* provider) override;
+    virtual kern_return_t Stop(IOService* provider) override;
+    virtual void free(void) override;
+    virtual kern_return_t ExternalMethod(
+        uint64_t selector,
+        IOUserClientMethodArguments* arguments,
+        const IOUserClientMethodDispatch* dispatch,
+        OSObject* target,
+        void* reference
+    ) override;
+};
+
+#endif /* YubiKeyUSBDriverUserClient_h */

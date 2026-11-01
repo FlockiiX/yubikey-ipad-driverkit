@@ -1,0 +1,508 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 71;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A00000000000000000000001 /* YubiKeyUSBPoCApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000001 /* YubiKeyUSBPoCApp.swift */; };
+		A00000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000002 /* ContentView.swift */; };
+		A00000000000000000000003 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000003 /* AppModel.swift */; };
+		A00000000000000000000004 /* DriverClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000004 /* DriverClient.swift */; };
+		A00000000000000000000005 /* DriverActivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000005 /* DriverActivation.swift */; };
+		A00000000000000000000006 /* DriverConnection.c in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000006 /* DriverConnection.c */; };
+		A00000000000000000000007 /* Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000011 /* Hex.swift */; };
+		A00000000000000000000008 /* OTPFeatureReportTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000012 /* OTPFeatureReportTransport.swift */; };
+		A00000000000000000000009 /* OTPStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000013 /* OTPStatus.swift */; };
+		A0000000000000000000000A /* OTPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000014 /* OTPError.swift */; };
+		A0000000000000000000000B /* OTPSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000015 /* OTPSession.swift */; };
+		A0000000000000000000000C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B00000000000000000000030 /* IOKit.framework */; };
+		A0000000000000000000000D /* OTPFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000017 /* OTPFrame.swift */; };
+		A0000000000000000000000E /* OTPSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000018 /* OTPSlot.swift */; };
+		A00000000000000000000010 /* YubiKeyUSBDriver.iig in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000020 /* YubiKeyUSBDriver.iig */; };
+		A00000000000000000000011 /* YubiKeyUSBDriver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000021 /* YubiKeyUSBDriver.cpp */; };
+		A00000000000000000000012 /* YubiKeyUSBDriverUserClient.iig in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000022 /* YubiKeyUSBDriverUserClient.iig */; };
+		A00000000000000000000013 /* YubiKeyUSBDriverUserClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000023 /* YubiKeyUSBDriverUserClient.cpp */; };
+		A00000000000000000000014 /* DriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B00000000000000000000031 /* DriverKit.framework */; };
+		A00000000000000000000015 /* USBDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B00000000000000000000032 /* USBDriverKit.framework */; };
+		A00000000000000000000016 /* YubiKeyUSBPoC.dext in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = B00000000000000000000041 /* YubiKeyUSBPoC.dext */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C00000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F00000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E00000000000000000000002;
+			remoteInfo = YubiKeyUSBDriver;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D00000000000000000000004 /* Embed System Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(SYSTEM_EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				A00000000000000000000016 /* YubiKeyUSBPoC.dext in Embed System Extensions */,
+			);
+			name = "Embed System Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B00000000000000000000001 /* YubiKeyUSBPoCApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YubiKeyUSBPoCApp.swift; sourceTree = "<group>"; };
+		B00000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B00000000000000000000003 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		B00000000000000000000004 /* DriverClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverClient.swift; sourceTree = "<group>"; };
+		B00000000000000000000005 /* DriverActivation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverActivation.swift; sourceTree = "<group>"; };
+		B00000000000000000000006 /* DriverConnection.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = DriverConnection.c; sourceTree = "<group>"; };
+		B00000000000000000000007 /* DriverConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriverConnection.h; sourceTree = "<group>"; };
+		B00000000000000000000008 /* YubiKeyUSBPoC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YubiKeyUSBPoC-Bridging-Header.h"; sourceTree = "<group>"; };
+		B00000000000000000000009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0000000000000000000000A /* App-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "App-iOS.entitlements"; sourceTree = "<group>"; };
+		B0000000000000000000000B /* App-macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "App-macOS.entitlements"; sourceTree = "<group>"; };
+		B00000000000000000000011 /* Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hex.swift; sourceTree = "<group>"; };
+		B00000000000000000000012 /* OTPFeatureReportTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPFeatureReportTransport.swift; sourceTree = "<group>"; };
+		B00000000000000000000013 /* OTPStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPStatus.swift; sourceTree = "<group>"; };
+		B00000000000000000000014 /* OTPError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPError.swift; sourceTree = "<group>"; };
+		B00000000000000000000015 /* OTPSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPSession.swift; sourceTree = "<group>"; };
+		B00000000000000000000016 /* DriverAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriverAPI.h; sourceTree = "<group>"; };
+		B00000000000000000000017 /* OTPFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPFrame.swift; sourceTree = "<group>"; };
+		B00000000000000000000018 /* OTPSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPSlot.swift; sourceTree = "<group>"; };
+		B00000000000000000000020 /* YubiKeyUSBDriver.iig */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.iig; path = YubiKeyUSBDriver.iig; sourceTree = "<group>"; };
+		B00000000000000000000021 /* YubiKeyUSBDriver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = YubiKeyUSBDriver.cpp; sourceTree = "<group>"; };
+		B00000000000000000000022 /* YubiKeyUSBDriverUserClient.iig */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.iig; path = YubiKeyUSBDriverUserClient.iig; sourceTree = "<group>"; };
+		B00000000000000000000023 /* YubiKeyUSBDriverUserClient.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = YubiKeyUSBDriverUserClient.cpp; sourceTree = "<group>"; };
+		B00000000000000000000024 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B00000000000000000000025 /* YubiKeyUSBDriver.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = YubiKeyUSBDriver.entitlements; sourceTree = "<group>"; };
+		B00000000000000000000026 /* YubiKeyUSBDriver-Development.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "YubiKeyUSBDriver-Development.entitlements"; sourceTree = "<group>"; };
+		B00000000000000000000030 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		B00000000000000000000031 /* DriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DriverKit.framework; path = System/Library/Frameworks/DriverKit.framework; sourceTree = SDKROOT; };
+		B00000000000000000000032 /* USBDriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = USBDriverKit.framework; path = System/Library/Frameworks/USBDriverKit.framework; sourceTree = SDKROOT; };
+		B00000000000000000000040 /* YubiKeyUSBPoC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YubiKeyUSBPoC.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B00000000000000000000041 /* YubiKeyUSBPoC.dext */ = {isa = PBXFileReference; explicitFileType = "wrapper.driver-extension"; includeInIndex = 0; path = YubiKeyUSBPoC.dext; sourceTree = BUILT_PRODUCTS_DIR; };
+		B00000000000000000000050 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		B00000000000000000000060 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D00000000000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0000000000000000000000C /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D00000000000000000000012 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000014 /* DriverKit.framework in Frameworks */,
+				A00000000000000000000015 /* USBDriverKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C00000000000000000000010 = {
+			isa = PBXGroup;
+			children = (
+				C00000000000000000000011 /* App */,
+				C00000000000000000000012 /* Driver */,
+				C00000000000000000000013 /* Shared */,
+				C00000000000000000000017 /* Sources/YubiKeyOTP */,
+				C00000000000000000000016 /* Config */,
+				C00000000000000000000014 /* Frameworks */,
+				B00000000000000000000050 /* README.md */,
+				C00000000000000000000015 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C00000000000000000000011 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000001 /* YubiKeyUSBPoCApp.swift */,
+				B00000000000000000000002 /* ContentView.swift */,
+				B00000000000000000000003 /* AppModel.swift */,
+				B00000000000000000000004 /* DriverClient.swift */,
+				B00000000000000000000005 /* DriverActivation.swift */,
+				B00000000000000000000006 /* DriverConnection.c */,
+				B00000000000000000000007 /* DriverConnection.h */,
+				B00000000000000000000008 /* YubiKeyUSBPoC-Bridging-Header.h */,
+				B00000000000000000000009 /* Info.plist */,
+				B0000000000000000000000A /* App-iOS.entitlements */,
+				B0000000000000000000000B /* App-macOS.entitlements */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000012 /* Driver */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000020 /* YubiKeyUSBDriver.iig */,
+				B00000000000000000000021 /* YubiKeyUSBDriver.cpp */,
+				B00000000000000000000022 /* YubiKeyUSBDriverUserClient.iig */,
+				B00000000000000000000023 /* YubiKeyUSBDriverUserClient.cpp */,
+				B00000000000000000000024 /* Info.plist */,
+				B00000000000000000000025 /* YubiKeyUSBDriver.entitlements */,
+				B00000000000000000000026 /* YubiKeyUSBDriver-Development.entitlements */,
+			);
+			path = Driver;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000013 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000016 /* DriverAPI.h */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000014 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000030 /* IOKit.framework */,
+				B00000000000000000000031 /* DriverKit.framework */,
+				B00000000000000000000032 /* USBDriverKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000015 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000040 /* YubiKeyUSBPoC.app */,
+				B00000000000000000000041 /* YubiKeyUSBPoC.dext */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000016 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000060 /* Signing.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000017 /* Sources/YubiKeyOTP */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000011 /* Hex.swift */,
+				B00000000000000000000014 /* OTPError.swift */,
+				B00000000000000000000012 /* OTPFeatureReportTransport.swift */,
+				B00000000000000000000017 /* OTPFrame.swift */,
+				B00000000000000000000015 /* OTPSession.swift */,
+				B00000000000000000000018 /* OTPSlot.swift */,
+				B00000000000000000000013 /* OTPStatus.swift */,
+			);
+			path = Sources/YubiKeyOTP;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D00000000000000000000010 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E00000000000000000000001 /* YubiKeyUSBPoC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F00000000000000000000011 /* Build configuration list for PBXNativeTarget "YubiKeyUSBPoC" */;
+			buildPhases = (
+				D00000000000000000000001 /* Sources */,
+				D00000000000000000000002 /* Frameworks */,
+				D00000000000000000000003 /* Resources */,
+				D00000000000000000000004 /* Embed System Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C00000000000000000000002 /* PBXTargetDependency */,
+			);
+			name = YubiKeyUSBPoC;
+			productName = YubiKeyUSBPoC;
+			productReference = B00000000000000000000040 /* YubiKeyUSBPoC.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E00000000000000000000002 /* YubiKeyUSBDriver */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F00000000000000000000012 /* Build configuration list for PBXNativeTarget "YubiKeyUSBDriver" */;
+			buildPhases = (
+				D00000000000000000000010 /* Headers */,
+				D00000000000000000000011 /* Sources */,
+				D00000000000000000000012 /* Frameworks */,
+				D00000000000000000000013 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YubiKeyUSBDriver;
+			productName = YubiKeyUSBPoC;
+			productReference = B00000000000000000000041 /* YubiKeyUSBPoC.dext */;
+			productType = "com.apple.product-type.driver-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F00000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 2660;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					E00000000000000000000001 = {
+						CreatedOnToolsVersion = 26.6;
+					};
+					E00000000000000000000002 = {
+						CreatedOnToolsVersion = 26.6;
+					};
+				};
+			};
+			buildConfigurationList = F00000000000000000000010 /* Build configuration list for PBXProject "YubiKeyUSBPoC" */;
+			compatibilityVersion = "Xcode 16.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C00000000000000000000010;
+			productRefGroup = C00000000000000000000015 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E00000000000000000000001 /* YubiKeyUSBPoC */,
+				E00000000000000000000002 /* YubiKeyUSBDriver */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D00000000000000000000003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D00000000000000000000013 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D00000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000001 /* YubiKeyUSBPoCApp.swift in Sources */,
+				A00000000000000000000002 /* ContentView.swift in Sources */,
+				A00000000000000000000003 /* AppModel.swift in Sources */,
+				A00000000000000000000004 /* DriverClient.swift in Sources */,
+				A00000000000000000000005 /* DriverActivation.swift in Sources */,
+				A00000000000000000000006 /* DriverConnection.c in Sources */,
+				A00000000000000000000007 /* Hex.swift in Sources */,
+				A00000000000000000000008 /* OTPFeatureReportTransport.swift in Sources */,
+				A00000000000000000000009 /* OTPStatus.swift in Sources */,
+				A0000000000000000000000A /* OTPError.swift in Sources */,
+				A0000000000000000000000B /* OTPSession.swift in Sources */,
+				A0000000000000000000000D /* OTPFrame.swift in Sources */,
+				A0000000000000000000000E /* OTPSlot.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D00000000000000000000011 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000010 /* YubiKeyUSBDriver.iig in Sources */,
+				A00000000000000000000011 /* YubiKeyUSBDriver.cpp in Sources */,
+				A00000000000000000000012 /* YubiKeyUSBDriverUserClient.iig in Sources */,
+				A00000000000000000000013 /* YubiKeyUSBDriverUserClient.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C00000000000000000000002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E00000000000000000000002 /* YubiKeyUSBDriver */;
+			targetProxy = C00000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		F10000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B00000000000000000000060 /* Signing.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F10000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B00000000000000000000060 /* Signing.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		F10000000000000000000011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "App/App-macOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = "App/App-iOS.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared";
+				INFOPLIST_FILE = App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_IDENTIFIER)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "App/YubiKeyUSBPoC-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		F10000000000000000000012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "App/App-macOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = "App/App-iOS.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared";
+				INFOPLIST_FILE = App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_IDENTIFIER)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "App/YubiKeyUSBPoC-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+		F10000000000000000000021 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "Driver/YubiKeyUSBDriver-Development.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DRIVERKIT_DEPLOYMENT_TARGET = 27.0;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared";
+				INFOPLIST_FILE = Driver/Info.plist;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_IDENTIFIER).driver";
+				PRODUCT_NAME = YubiKeyUSBPoC;
+				SDKROOT = driverkit;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = driverkit;
+			};
+			name = Debug;
+		};
+		F10000000000000000000022 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = Driver/YubiKeyUSBDriver.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DRIVERKIT_DEPLOYMENT_TARGET = 27.0;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared";
+				INFOPLIST_FILE = Driver/Info.plist;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_IDENTIFIER).driver";
+				PRODUCT_NAME = YubiKeyUSBPoC;
+				SDKROOT = driverkit;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = driverkit;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F00000000000000000000010 /* Build configuration list for PBXProject "YubiKeyUSBPoC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F10000000000000000000001 /* Debug */,
+				F10000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F00000000000000000000011 /* Build configuration list for PBXNativeTarget "YubiKeyUSBPoC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F10000000000000000000011 /* Debug */,
+				F10000000000000000000012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F00000000000000000000012 /* Build configuration list for PBXNativeTarget "YubiKeyUSBDriver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F10000000000000000000021 /* Debug */,
+				F10000000000000000000022 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F00000000000000000000001 /* Project object */;
+}
