@@ -12,6 +12,7 @@ public enum OTPKeepaliveState: Equatable, Sendable {
 /// OTP status and runs HMAC-SHA1 challenge-response; it has no configuration
 /// commands. Its only writes are challenge frames and Yubico's dummy report
 /// that finishes or aborts a transfer.
+/// Upstream copyright and license: see THIRD_PARTY_NOTICES at the repository root.
 ///
 /// Every method blocks until the YubiKey answers, the user touches the key,
 /// or the timeout expires. Call them off the main thread.

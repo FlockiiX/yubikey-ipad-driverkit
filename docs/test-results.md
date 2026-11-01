@@ -19,7 +19,7 @@ M-series iPad.
 | USB configuration activated: active 0 → selected 1 → verified 1 | Pass |
 | Eight-byte Feature `GET_REPORT` / `SET_REPORT` | Pass |
 | Touch wait, then 20-byte response with CRC residual `0xf0b8` | Pass |
-| Same 32-byte hex challenge gives the same response as `ykman` | Pass, compared byte for byte by the author |
+| Same 32-byte hex challenge gives the same response as `ykman` | Pass, byte-for-byte match |
 
 Log excerpt from the successful run, with the app's default text challenge:
 

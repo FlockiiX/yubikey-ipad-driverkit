@@ -6,6 +6,7 @@
 /// holds flags and the chunk's sequence number.
 ///
 /// This mirrors `yubikit.core.otp` in Yubico's yubikey-manager.
+/// Upstream copyright and license: see THIRD_PARTY_NOTICES at the repository root.
 public enum OTPFrame {
     /// Size of one HID Feature report on the OTP interface (report ID 0).
     public static let featureReportSize = 8

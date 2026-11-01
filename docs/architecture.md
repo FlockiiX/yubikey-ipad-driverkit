@@ -130,14 +130,15 @@ shorter than 64 bytes is padded with `0x00`, or with `0x01` if its last byte is
 
 ## Platform lifecycle
 
-On macOS, the driver is embedded under `Contents/Library/SystemExtensions`, and
-the app activates it with `OSSystemExtensionRequest`. On iPadOS it is embedded
-under `SystemExtensions`; the system discovers it, and the user enables it in
-**Settings > Privacy & Security > Drivers**. iPadOS has no activation API.
+The driver's filename is its bundle identifier followed by `.dext` on both
+platforms. On macOS, it is embedded under `Contents/Library/SystemExtensions`,
+and the app activates it with `OSSystemExtensionRequest`. Launch the app from
+`/Applications` unless system extensions developer mode is enabled. On iPadOS
+it is embedded under `SystemExtensions`; the system discovers it, and the user
+enables it in **Settings > Privacy & Security > Drivers**. iPadOS has no
+activation API.
 
-## DriverKit pitfalls
-
-These cost the most time and are worth knowing for any USBDriverKit HID work:
+## DriverKit implementation notes
 
 - **The configuration may not be active.** After device-level matching, the
   YubiKey was still unconfigured (configuration 0). Descriptors were readable,
@@ -163,3 +164,30 @@ All three user-client methods check exact input and output sizes through
 bounded 2 KiB log. The macOS app's `userclient-access` entitlement names only
 its own driver, and the driver requests neither `allow-any-userclient-access`
 nor `allow-third-party-userclients`.
+
+## Signing
+
+| Target | Configuration | Entitlements |
+|---|---|---|
+| Driver | Debug | `Driver/YubiKeyUSBDriver-Development.entitlements`: `driverkit`, `transport.usb` with `idVendor = "*"` |
+| Driver | Release | `Driver/YubiKeyUSBDriver.entitlements`: `driverkit`, `transport.usb` with `idVendor = 4176` (`0x1050`) |
+| App | iPadOS | `communicates-with-drivers`, `system-extension.install` |
+| App | macOS | `system-extension.install`, `userclient-access` for its own driver |
+
+The development entitlement allows any vendor, but the driver still matches
+only Yubico devices: the IOKit personality in `Driver/Info.plist` decides what
+it matches. Release builds fail to sign until Apple grants the VendorID
+entitlement.
+
+## References
+
+- [Apple: Communicating between a DriverKit extension and a client app](https://developer.apple.com/documentation/driverkit/communicating-between-a-driverkit-extension-and-a-client-app)
+- [Apple: Requesting entitlements for DriverKit development](https://developer.apple.com/documentation/driverkit/requesting-entitlements-for-driverkit-development)
+- [Apple: USB transport entitlement](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.driverkit.transport.usb)
+- [Apple: IOUSBHostDevice.SetConfiguration](https://developer.apple.com/documentation/usbdriverkit/iousbhostdevice/setconfiguration)
+- [Apple: System Extensions packaging requirements](https://developer.apple.com/documentation/systemextensions)
+- [Apple: Installing system extensions and drivers](https://developer.apple.com/documentation/systemextensions/installing-system-extensions-and-drivers)
+- [Yubico: OTP framing (`yubikit/core/otp.py`)](https://github.com/Yubico/yubikey-manager/blob/main/yubikit/core/otp.py)
+- [Yubico: challenge-response command (`yubikit/yubiotp.py`)](https://github.com/Yubico/yubikey-manager/blob/main/yubikit/yubiotp.py)
+- [KeePassXC: KDBX 3 challenge](https://github.com/keepassxreboot/keepassxc/blob/develop/src/format/Kdbx3Reader.cpp)
+- [KeePassXC: KDBX 4 challenge](https://github.com/keepassxreboot/keepassxc/blob/develop/src/keys/CompositeKey.cpp)
