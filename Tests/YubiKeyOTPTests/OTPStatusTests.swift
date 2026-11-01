@@ -21,7 +21,6 @@ final class OTPStatusTests: XCTestCase {
 
         XCTAssertFalse(status.isConfigured(.one))
         XCTAssertFalse(status.isConfigured(.two))
-        XCTAssertFalse(status.hasConfiguredSlot)
     }
 
     func testRejectsShortReport() {

@@ -6,6 +6,8 @@ final class MockTransport: OTPFeatureReportTransport {
     private var reads: [[UInt8]]
     private let fallback: [UInt8]?
     private(set) var writes: [[UInt8]] = []
+    var readError: Error = OTPError.transport("Mock read queue exhausted")
+    var writeError: Error?
 
     init(reads: [[UInt8]], fallback: [UInt8]? = nil) {
         self.reads = reads
@@ -15,11 +17,12 @@ final class MockTransport: OTPFeatureReportTransport {
     func readFeatureReport() throws -> Data {
         if !reads.isEmpty { return Data(reads.removeFirst()) }
         if let fallback { return Data(fallback) }
-        throw OTPError.transport("Mock read queue exhausted")
+        throw readError
     }
 
     func writeFeatureReport(_ report: Data) throws {
         writes.append([UInt8](report))
+        if let writeError { throw writeError }
     }
 }
 
@@ -44,10 +47,10 @@ enum Reports {
         }
     }
 
-    /// The reads of a complete exchange for a challenge that fits in the first
-    /// frame chunk: status, two write-ready polls, response chunks, end marker.
-    static func successfulExchange(response: [UInt8], touchLevel: UInt8) -> [[UInt8]] {
+    /// Status, one readiness poll per write, response chunks, and end marker.
+    static func successfulExchange(response: [UInt8], touchLevel: UInt8, writeReportCount: Int = 2) -> [[UInt8]] {
         let idle = status(touchLevel: touchLevel)
-        return [idle, idle, idle] + responseChunks(for: response) + [[0, 0, 0, 0, 0, 0, 0, 0x40]]
+        return Array(repeating: idle, count: writeReportCount + 1)
+            + responseChunks(for: response) + [[0, 0, 0, 0, 0, 0, 0, 0x40]]
     }
 }

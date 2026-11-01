@@ -62,8 +62,9 @@ change to the YubiKey's slots.
 
 | Check | Expected |
 |---|---|
-| `swift test` | 21 tests pass |
+| `swift test` | 26 tests pass |
 | `swift build` | `YubiKeyOTP` and `ykusb-mac-probe` build |
+| `sh scripts/test-app-status.sh` | connection and in-operation disconnect checks pass |
 | Driver extension, DriverKit SDK, unsigned | builds |
 | App with embedded driver, macOS and iPadOS, unsigned | builds |
 
@@ -71,18 +72,27 @@ The unit tests cover:
 
 - CRC-16 reference vector and the `0xf0b8` response residual;
 - frame layout, skipping of all-zero chunks, and sequence flags;
+- a fixed, independently calculated vector for all reports of a 32-byte
+  challenge, including payload, CRC bytes, and skipped zero chunks;
 - Yubico's challenge padding rule;
 - response assembly and CRC check for Slot 1 (`0x30`) and Slot 2 (`0x38`);
 - rejection of an unconfigured slot and of an oversized challenge before any
   write;
 - touch keepalive followed by success, and touch timeout with the dummy report;
-- tolerance of a repeated chunk, and rejection of an unexpected sequence;
+- tolerance of repeated first and later chunks, and rejection of an unexpected
+  sequence;
+- dummy-report cleanup after incomplete transfers and transport errors,
+  preserving the original transport error even when cleanup fails;
 - invalid report length and corrupted response CRC;
 - status parsing with bytes from a real YubiKey 5C NFC;
 - hex decoding.
 
 The mocks do not exercise USB enumeration or configuration; the hardware test
 above covers those.
+
+The app connection checks also cover unplugging during status reads and
+challenge-response, reconnecting, and cancelling the connection monitor.
+Waits for operations and monitor cancellation have deadlines.
 
 ## Reporting results on other hardware
 

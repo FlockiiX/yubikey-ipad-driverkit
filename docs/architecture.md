@@ -25,9 +25,10 @@ YubiKey OTP HID interface
 
 The protocol policy lives in the app. The driver handles USB enumeration,
 opening the device, configuration activation, OTP interface selection, and
-the two Feature report transfers. It cannot run a slot configuration command
-because the user client has no selector for one, and it never accepts a USB
-setup packet from the app: it builds every request itself.
+the two Feature report transfers. It builds every USB setup packet itself, but
+passes Feature report payloads through unchanged. Configuration commands use
+the same OTP transport and are not blocked by the driver. The supplied app and
+OTP library implement only status reads and HMAC-SHA1 challenge-response.
 
 `Sources/YubiKeyOTP` depends only on Foundation and on the
 `OTPFeatureReportTransport` protocol. The app's `DriverClient`, the macOS
@@ -47,7 +48,7 @@ An interface-level driver (`IOUSBHostInterface`) would load next to the system's
 HID driver and lose access to the HID interface that driver already owns.
 Matching the whole device avoids that. In exchange, the YubiKey's FIDO and CCID
 interfaces are unavailable to others while the driver is attached. The driver
-makes no persistent change to the key.
+makes no persistent change to the key during startup.
 
 ## Startup
 
@@ -99,7 +100,9 @@ and Swift driver client with a fake C transport boundary.
 These are the raw USB equivalents of `IOHIDDeviceGetReport` and
 `IOHIDDeviceSetReport` with a Feature report and report ID 0, which Yubico's
 macOS code uses. Every request has a two-second timeout and is logged with all
-setup fields, the `IOReturn`, the transfer count, and the report bytes.
+setup fields, the `IOReturn`, and the transfer count. Feature report payloads
+are excluded from driver logs. The test app and macOS probe still display
+protocol traces, including challenges and responses, for comparison.
 
 ## OTP protocol
 
@@ -114,9 +117,11 @@ setup fields, the `IOReturn`, the transfer count, and the report bytes.
   (`0x80`).
 - The response arrives in chunks flagged `0x40 | sequence`. A report repeating
   the previous chunk is tolerated; any other sequence is an error. A sequence
-  of 0 after other chunks ends the response.
+  of 0 after later chunks ends the response; a repeated first chunk is tolerated.
 - Flag `0x20` means the device waits for a touch.
 - The dummy report `00 00 00 00 00 00 00 FF` finishes or aborts a transfer.
+- Failed frame writes and response reads attempt to abort the transfer while
+  preserving the original error, even if the abort itself fails.
 - The CRC over the 20-byte response and its two CRC bytes must equal `0xF0B8`.
 
 The HMAC-SHA1 commands are `0x30` (Slot 1) and `0x38` (Slot 2). A challenge

@@ -4,12 +4,20 @@
 static kern_return_t nextOpen = kIOReturnNotFound;
 static kern_return_t nextInfo = kIOReturnSuccess;
 static int serviceMissing = 1;
+static kern_return_t nextReport = kIOReturnSuccess;
+static int reportReadsRemaining = 0;
 
 void YKTestSetResults(kern_return_t openResult, kern_return_t infoResult, int missingService)
 {
     nextOpen = openResult;
     nextInfo = infoResult;
     serviceMissing = missingService;
+}
+
+void YKTestSetReportResult(kern_return_t result, int successfulReads)
+{
+    nextReport = result;
+    reportReadsRemaining = successfulReads;
 }
 
 kern_return_t YKUSBOpen(io_connect_t* connection, const char** operation)
@@ -35,6 +43,8 @@ kern_return_t YKUSBGetDeviceInfo(io_connect_t connection, YKUSBDeviceInfo* info)
 
 kern_return_t YKUSBGetFeatureReport(io_connect_t connection, uint8_t* report)
 {
+    if (reportReadsRemaining > 0) --reportReadsRemaining;
+    else if (nextReport != kIOReturnSuccess) return nextReport;
     const uint8_t status[8] = {0, 5, 7, 1, 9, 3, 0, 0};
     memcpy(report, status, sizeof(status));
     return kIOReturnSuccess;

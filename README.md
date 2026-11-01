@@ -81,10 +81,12 @@ Logs and details are in [Test results](docs/test-results.md).
 
 ## Safety
 
-The code cannot change the YubiKey's configuration. It contains no slot
-programming, erasing, mode switching, or secret generation, and never sees the
-HMAC secret. The only writes, each marked `SAFE TRANSIENT PROTOCOL WRITE` in
-the source, are:
+The supplied app and OTP library implement no slot programming, erasing, mode
+switching, or secret generation, and never see the HMAC secret. The driver
+exposes a raw eight-byte Feature report transport; it does not restrict OTP
+commands. A modified client could use it to send configuration commands.
+
+The supplied app and driver perform these writes:
 
 - the eight-byte chunks of an HMAC challenge (command `0x30` for Slot 1, `0x38`
   for Slot 2);

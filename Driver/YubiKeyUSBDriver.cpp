@@ -347,8 +347,7 @@ kern_return_t ActivateConfiguration(IOService* owner, YubiKeyUSBDriver_IVars* iv
     Log(ivars, "GET_CONFIGURATION result=0x%08x active=%u expected=%u", result, active, expected);
     if (result != kIOReturnSuccess || active == expected) return result;
 
-    // SAFE TRANSIENT PROTOCOL WRITE: selects the configuration for this USB
-    // session. A standard USB request, not a YubiKey slot or capability write.
+    // Select the configuration for this USB session.
     result = ivars->device->SetConfiguration(expected, false);
     Log(ivars, "SET_CONFIGURATION value=%u matchInterfaces=false result=0x%08x", expected, result);
     if (result != kIOReturnSuccess) return result;
@@ -424,11 +423,6 @@ kern_return_t TransferFeatureReport(
         name, requestType, request, kHIDFeatureReportID0, ivars->info.otpInterfaceNumber,
         kYKUSBFeatureReportSize, result, transferred);
     if (result == kIOReturnSuccess && transferred != kYKUSBFeatureReportSize) result = kIOReturnUnderrun;
-    if (result == kIOReturnSuccess) {
-        char hex[2 * kYKUSBFeatureReportSize + 1];
-        FormatHex(report, kYKUSBFeatureReportSize, hex, sizeof(hex));
-        Log(ivars, "%s_REPORT bytes=%s", name, hex);
-    }
     return result;
 }
 
@@ -537,9 +531,7 @@ kern_return_t YubiKeyUSBDriver::GetFeatureReport(uint8_t output[kYKUSBFeatureRep
 
 kern_return_t YubiKeyUSBDriver::SetFeatureReport(const uint8_t input[kYKUSBFeatureReportSize])
 {
-    // SAFE TRANSIENT PROTOCOL WRITE. The app can only construct OTP challenge
-    // chunks and the dummy report that finishes or aborts a transfer. There is
-    // no selector for device or slot configuration commands.
+    // Raw OTP Feature report transport; command policy belongs to the client.
     uint8_t report[kYKUSBFeatureReportSize] = {};
     memcpy(report, input, sizeof(report));
     return TransferFeatureReport(this, ivars, false, report);

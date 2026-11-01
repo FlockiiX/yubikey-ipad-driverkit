@@ -28,10 +28,6 @@ public struct OTPStatus: Equatable, Sendable {
         touchLevel & (slot == .one ? Flag.slot1Touch : Flag.slot2Touch) != 0
     }
 
-    var hasConfiguredSlot: Bool {
-        OTPSlot.allCases.contains(where: isConfigured)
-    }
-
     init(report: [UInt8]) throws {
         guard report.count == OTPFrame.featureReportSize else {
             throw OTPError.invalidReportLength(actual: report.count, expected: OTPFrame.featureReportSize)

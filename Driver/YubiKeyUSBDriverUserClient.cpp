@@ -3,6 +3,7 @@
 // It exposes exactly the three selectors in DriverAPI.h, each with a fixed
 // structure size that IOUserClientMethodDispatch checks before the call. The
 // app cannot send arbitrary USB requests; the driver builds them itself.
+// Report payloads are supplied by the client and are not command-filtered.
 
 #include <DriverKit/IOLib.h>
 #include <DriverKit/OSData.h>

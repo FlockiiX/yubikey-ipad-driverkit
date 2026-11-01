@@ -4,7 +4,16 @@ import Foundation
 struct AppConnectionTests {
     @MainActor
     static func settled(_ model: AppModel) async {
-        while model.isBusy { try? await Task.sleep(nanoseconds: 1_000_000) }
+        await waitUntil("App operation did not finish") { !model.isBusy }
+    }
+
+    @MainActor
+    static func waitUntil(_ message: String, timeout: TimeInterval = 5, condition: () -> Bool) async {
+        let deadline = ProcessInfo.processInfo.systemUptime + timeout
+        while !condition() {
+            precondition(ProcessInfo.processInfo.systemUptime < deadline, message)
+            try? await Task.sleep(nanoseconds: 1_000_000)
+        }
     }
 
     @MainActor
@@ -64,20 +73,44 @@ struct AppConnectionTests {
         await settled(model)
         precondition(model.driverStatus == "Loaded; user client connected")
         precondition(model.yubiKeyStatus == "Connected")
+        YKTestSetReportResult(kIOReturnNoDevice, 0)
+        model.readStatus()
+        await settled(model)
+        precondition(model.driverStatus == "Waiting for device connection")
+        precondition(model.yubiKeyStatus == "Disconnected")
+        precondition(model.product == "—" && model.firmware == "—")
+
+        YKTestSetReportResult(kIOReturnSuccess, 0)
+        model.refresh()
+        await settled(model)
+        model.challenge = ""
+        YKTestSetReportResult(kIOReturnNoDevice, 3)
+        model.runChallenge(slot: .two)
+        await settled(model)
+        precondition(model.driverStatus == "Waiting for device connection")
+        precondition(model.yubiKeyStatus == "Disconnected")
+        precondition(model.product == "—" && model.otpInterface == "—")
+        YKTestSetReportResult(kIOReturnSuccess, 0)
+
         // Exercise the view's actual monitoring loop, including its cancellation.
         YKTestSetResults(kIOReturnNotFound, kIOReturnNotAttached, 1)
         model.refresh(automatically: true)
         await settled(model)
         precondition(model.driverStatus == "Waiting for device connection")
-        let monitor = Task { await model.monitorConnection() }
+        var monitorStopped = false
+        let monitor = Task {
+            defer { monitorStopped = true }
+            await model.monitorConnection()
+        }
         try? await Task.sleep(nanoseconds: 50_000_000)
         await settled(model)
         YKTestSetResults(kIOReturnSuccess, kIOReturnSuccess, 0)
-        try? await Task.sleep(nanoseconds: 2_100_000_000)
+        await waitUntil("Monitor must detect a newly attached key") { model.yubiKeyStatus == "Connected" }
         await settled(model)
         precondition(model.yubiKeyStatus == "Connected", "Monitor must detect a newly attached key")
         monitor.cancel()
+        await waitUntil("Monitor did not stop after cancellation", timeout: 1) { monitorStopped }
         await monitor.value
-        print("App connection tests passed (absent, open errors, connect, idle, disconnect, reconnect).")
+        print("App connection tests passed (absent, open errors, connect, idle, in-operation disconnects, reconnect, cancellation).")
     }
 }

@@ -65,9 +65,17 @@ public final class OTPSession {
         let status = try OTPStatus(report: readReport())
         guard status.isConfigured(slot) else { throw OTPError.slotNotConfigured(slot) }
 
-        try writeFrame(OTPFrame.frame(command: slot.hmacCommand, payload: payload), deadline: deadline)
-        let response = try readResponse(previousProgrammingSequence: status.programmingSequence, deadline: deadline)
-        return try verifiedHMACResponse(response)
+        do {
+            try writeFrame(OTPFrame.frame(command: slot.hmacCommand, payload: payload), deadline: deadline)
+            let response = try readResponse(deadline: deadline)
+            let hmac = try verifiedHMACResponse(response)
+            try sendDummyReport()
+            return hmac
+        } catch {
+            // Abort a partial transfer without replacing its original error.
+            try? sendDummyReport()
+            throw error
+        }
     }
 
     // MARK: - Transfer
@@ -83,7 +91,6 @@ public final class OTPSession {
     private func writeFrame(_ frame: [UInt8], deadline: TimeInterval) throws {
         for report in OTPFrame.outboundReports(for: frame) {
             try waitUntilReadyToWrite(deadline: deadline)
-            // SAFE TRANSIENT PROTOCOL WRITE: one chunk of an OTP command frame.
             let sequence = report[OTPFrame.flagsIndex] & OTPFrame.Flag.sequenceMask
             onLog?("OTP frame chunk sent: seq=\(sequence), report=\(Hex.encode(report))")
             try writeReport(report)
@@ -99,7 +106,7 @@ public final class OTPSession {
         throw OTPError.responseTimeout
     }
 
-    private func readResponse(previousProgrammingSequence: UInt8, deadline: TimeInterval) throws -> [UInt8] {
+    private func readResponse(deadline: TimeInterval) throws -> [UInt8] {
         var response: [UInt8] = []
         var expectedSequence: UInt8 = 0
         var isWaitingForTouch = false
@@ -116,23 +123,17 @@ public final class OTPSession {
                     response += report.prefix(OTPFrame.chunkSize)
                     onLog?("response chunk received: seq=\(sequence), accumulated=\(response.count)")
                     expectedSequence &+= 1
-                } else if sequence == 0 && expectedSequence > 0 {
-                    // The sequence wrapped around: the response is complete.
-                    try sendDummyReport()
-                    return response
                 } else if expectedSequence > 0 && sequence == (expectedSequence &- 1) & OTPFrame.Flag.sequenceMask {
-                    // A Feature GET can return the previous chunk until the device advances.
+                    // Check repeats before the end marker: the first chunk is also sequence 0.
                     sleep(Polling.repeatedChunkInterval)
+                } else if sequence == 0 && expectedSequence > 0 {
+                    return response
                 } else {
                     throw OTPError.unexpectedSequence(expected: expectedSequence, actual: sequence)
                 }
             } else if flags == 0 {
                 // A plain status report: the device has no response data.
                 guard response.isEmpty else { throw OTPError.incompleteTransfer }
-                let status = try OTPStatus(report: report)
-                if Self.acknowledgesCommand(status, previousProgrammingSequence: previousProgrammingSequence) {
-                    return [UInt8](status.raw)
-                }
                 throw isWaitingForTouch ? OTPError.touchTimeout : OTPError.commandRejected
             } else if flags & OTPFrame.Flag.touchPending != 0 {
                 if !isWaitingForTouch { onLog?("waiting for touch") }
@@ -144,13 +145,6 @@ public final class OTPSession {
                 sleep(Polling.processingInterval)
             }
         }
-    }
-
-    /// A command without response data succeeded if the programming sequence
-    /// advanced. It resets to 0 when no slot is configured any more.
-    private static func acknowledgesCommand(_ status: OTPStatus, previousProgrammingSequence previous: UInt8) -> Bool {
-        let next = status.programmingSequence
-        return next == previous &+ 1 || (next == 0 && previous > 0 && !status.hasConfiguredSlot)
     }
 
     private func verifiedHMACResponse(_ response: [UInt8]) throws -> Data {
@@ -170,14 +164,11 @@ public final class OTPSession {
 
     private func checkDeadline(_ deadline: TimeInterval, isWaitingForTouch: Bool) throws {
         guard now() >= deadline else { return }
-        try? sendDummyReport()
         throw isWaitingForTouch ? OTPError.touchTimeout : OTPError.responseTimeout
     }
 
     /// Finishes or aborts the current transfer.
     private func sendDummyReport() throws {
-        // SAFE TRANSIENT PROTOCOL WRITE: Yubico's dummy report ends the current
-        // OTP transfer. It is not a device configuration command.
         var report = [UInt8](repeating: 0, count: OTPFrame.featureReportSize)
         report[OTPFrame.flagsIndex] = OTPFrame.Flag.dummyReport
         onLog?("reset/finish report: \(Hex.encode(report))")
@@ -187,14 +178,7 @@ public final class OTPSession {
     // MARK: - Transport
 
     private func readReport() throws -> [UInt8] {
-        let report: Data
-        do {
-            report = try transport.readFeatureReport()
-        } catch let error as OTPError {
-            throw error
-        } catch {
-            throw OTPError.transport("Feature report read failed: \(error.localizedDescription)")
-        }
+        let report = try transport.readFeatureReport()
         guard report.count == OTPFrame.featureReportSize else {
             throw OTPError.invalidReportLength(actual: report.count, expected: OTPFrame.featureReportSize)
         }
@@ -203,12 +187,6 @@ public final class OTPSession {
 
     private func writeReport(_ report: [UInt8]) throws {
         precondition(report.count == OTPFrame.featureReportSize)
-        do {
-            try transport.writeFeatureReport(Data(report))
-        } catch let error as OTPError {
-            throw error
-        } catch {
-            throw OTPError.transport("Feature report write failed: \(error.localizedDescription)")
-        }
+        try transport.writeFeatureReport(Data(report))
     }
 }
