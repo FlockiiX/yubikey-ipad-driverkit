@@ -6,11 +6,24 @@
 
 #include <IOKit/IOKitLib.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "DriverAPI.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// Some IOReturn macros are not imported into Swift by the iPadOS SDK.
+static inline bool YKUSBIsNotFound(kern_return_t result)
+{
+    return result == kIOReturnNotFound;
+}
+
+static inline bool YKUSBIsDeviceDisconnected(kern_return_t result)
+{
+    return result == kIOReturnNoDevice || result == kIOReturnOffline ||
+        result == kIOReturnNotOpen || result == kIOReturnNotAttached;
+}
 
 // On failure, operation identifies the failing step (a static string; do not free).
 kern_return_t YKUSBOpen(io_connect_t* connection, const char** operation);

@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 /// View state and actions of the test app.
 ///
@@ -21,8 +22,8 @@ final class AppModel: ObservableObject {
         }
     }
 
-    @Published private(set) var driverStatus = "Not connected"
-    @Published private(set) var yubiKeyStatus = "Unknown"
+    @Published private(set) var driverStatus = "Checking device connection…"
+    @Published private(set) var yubiKeyStatus = "Checking…"
     @Published private(set) var usbIDs = "—"
     @Published private(set) var product = "—"
     @Published private(set) var firmware = "—"
@@ -37,21 +38,45 @@ final class AppModel: ObservableObject {
     @Published private(set) var log = ""
 
     private var client: DriverClient?
+    private var lastRefreshFailure: String?
     private let ioQueue = DispatchQueue(label: "YubiKeyUSBPoC.driver-io", qos: .userInitiated)
     private let timestampFormatter = ISO8601DateFormatter()
 
-    func refresh() {
-        run("Refresh", onFailure: { [self] in
-            client = nil
-            driverStatus = "Unavailable"
-            yubiKeyStatus = "Driver not enabled or YubiKey not connected"
+    /// Checks only while idle, so a touch/challenge transaction is never interrupted.
+    func monitorConnection() async {
+        while !Task.isCancelled {
+            refresh(automatically: true)
+            do { try await Task.sleep(nanoseconds: 2_000_000_000) }
+            catch { return }
+        }
+    }
+
+    func refresh(automatically: Bool = false) {
+        let existingClient = client
+        run("Refresh", logsProgress: !automatically, onFailure: { [self] error in
+            let previousStatus = driverStatus
+            let repeatedError = lastRefreshFailure == error.localizedDescription
+            lastRefreshFailure = error.localizedDescription
+            let waiting = isMissingDevice(error)
+            clearConnection()
+            driverStatus = waiting ? "Waiting for device connection" : "Connection failed"
+            yubiKeyStatus = waiting ? "Not detected" : "Status unavailable"
+            if waiting {
+                if !automatically || previousStatus != driverStatus {
+                    appendLog("No active YubiKey driver service. Connect the YubiKey. If it is already connected, enable the driver and reconnect it.")
+                }
+                return true
+            }
+            // Do not repeat an unchanged connection error every two seconds.
+            return automatically && repeatedError
         }) { [self] in
             let (client, info) = try await performIO { () -> (DriverClient, DriverDeviceInfo) in
-                let client = try DriverClient()
+                let client = try existingClient ?? DriverClient()
                 return (client, try client.deviceInfo())
             }
             self.client = client
-            show(info)
+            lastRefreshFailure = nil
+            if !automatically || existingClient == nil { show(info) }
         }
     }
 
@@ -89,21 +114,22 @@ final class AppModel: ObservableObject {
 
     private func run(
         _ name: String,
-        onFailure: @escaping @MainActor () -> Void = {},
+        logsProgress: Bool = true,
+        onFailure: @escaping @MainActor (Error) -> Bool = { _ in false },
         operation: @escaping @MainActor () async throws -> Void
     ) {
         guard !isBusy else { return }
         isBusy = true
-        appendLog("\(name) started")
+        if logsProgress { appendLog("\(name) started") }
         Task {
             defer { isBusy = false }
             do {
                 try await operation()
-                appendLog("\(name) finished")
+                if logsProgress { appendLog("\(name) finished") }
             } catch {
                 yubiKeyStatus = "\(name) failed"
-                onFailure()
-                appendLog("\(name) failed: \(error.localizedDescription)")
+                let handled = onFailure(error)
+                if !handled { appendLog("\(name) failed: \(error.localizedDescription)") }
             }
         }
     }
@@ -113,7 +139,32 @@ final class AppModel: ObservableObject {
             appendLog("\(name): driver not connected. Enable the driver, reconnect the YubiKey, then tap Refresh.")
             return
         }
-        run(name) { try await operation(client) }
+        run(name, onFailure: { [self] error in
+            if isMissingDevice(error) {
+                clearConnection()
+                driverStatus = "Waiting for device connection"
+                yubiKeyStatus = "Disconnected"
+            }
+            return false
+        }) { try await operation(client) }
+    }
+
+    private func isMissingDevice(_ error: Error) -> Bool {
+        guard let error = error as? DriverClientError else { return false }
+        switch error {
+        case .serviceNotFound: return true
+        case .ioKit(_, let result):
+            return YKUSBIsDeviceDisconnected(result)
+        case .incompatibleDriver: return false
+        }
+    }
+
+    private func clearConnection() {
+        client = nil
+        usbIDs = "—"
+        product = "—"
+        firmware = "—"
+        otpInterface = "—"
     }
 
     private func performIO<Value>(_ work: @escaping @Sendable () throws -> Value) async throws -> Value {

@@ -91,6 +91,7 @@ const char* YKUSBReturnName(kern_return_t result)
         case kIOReturnNotFound: return "kIOReturnNotFound";
         case kIOReturnTimeout: return "kIOReturnTimeout";
         case kIOReturnNoDevice: return "kIOReturnNoDevice";
+        case kIOReturnNotAttached: return "kIOReturnNotAttached";
         case kIOReturnOffline: return "kIOReturnOffline";
         case kIOReturnNotReady: return "kIOReturnNotReady";
         case kIOReturnUnsupported: return "kIOReturnUnsupported";

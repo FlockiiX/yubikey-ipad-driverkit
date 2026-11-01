@@ -11,6 +11,9 @@ step "Swift package: build and test"
 swift build
 swift test
 
+step "App connection status (without hardware)"
+sh scripts/test-app-status.sh
+
 step "Driver extension (DriverKit)"
 xcodebuild -quiet -project YubiKeyUSBPoC.xcodeproj -scheme YubiKeyUSBDriver \
   -configuration Debug -sdk driverkit CODE_SIGNING_ALLOWED=NO build

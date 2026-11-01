@@ -70,6 +70,23 @@ Failures in steps 1 and 3–6 are recorded rather than fatal, so the app can
 connect and read the driver's log. Feature transfers stay disabled until the
 configuration is active and an OTP interface was found.
 
+## App connection status
+
+The app checks the connection every two seconds while its view is visible and
+no operation is running. Existing connections are checked with `GetDeviceInfo`;
+when none exists, the app searches for the driver service again. Background
+checks preserve OTP results and do not repeat unchanged status messages.
+
+An empty `IOServiceGetMatchingService` lookup means there is no active device
+service, not that the driver is uninstalled or disabled. The app displays
+“Waiting for device connection” / “Not detected” and logs an informational
+connection hint. If the key is already attached, the hint directs the user to
+enable the driver and reconnect. Opening an existing service, ABI checks, and
+other I/O failures remain errors. Losing the device clears its metadata.
+
+`sh scripts/test-app-status.sh` tests these transitions using the real app model
+and Swift driver client with a fake C transport boundary.
+
 ## USB requests
 
 | Operation | bmRequestType | bRequest | wValue | wIndex | wLength |

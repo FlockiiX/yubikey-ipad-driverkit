@@ -1,11 +1,14 @@
 import Foundation
 
 enum DriverClientError: Error, LocalizedError {
+    case serviceNotFound
     case ioKit(operation: String, result: kern_return_t)
     case incompatibleDriver(abiVersion: UInt32)
 
     var errorDescription: String? {
         switch self {
+        case .serviceNotFound:
+            return "No active YubiKey driver service. Connect the YubiKey. If it is already connected, enable the driver and reconnect it."
         case .ioKit(let operation, let result):
             return "\(operation) failed: \(Self.describe(result))"
         case .incompatibleDriver(let abiVersion):
@@ -40,7 +43,13 @@ final class DriverClient: OTPFeatureReportTransport, @unchecked Sendable {
         var failedStep: UnsafePointer<CChar>?
         let result = YKUSBOpen(&connection, &failedStep)
         guard result == kIOReturnSuccess else {
-            throw DriverClientError.ioKit(operation: failedStep.map { String(cString: $0) } ?? "YKUSBOpen", result: result)
+            let operation = failedStep.map { String(cString: $0) } ?? "YKUSBOpen"
+            // Only an empty service lookup is expected while waiting for hardware.
+            // NotFound from IOServiceOpen is still a connection error.
+            if YKUSBIsNotFound(result) && operation == "IOServiceGetMatchingService(YubiKeyUSBDriver)" {
+                throw DriverClientError.serviceNotFound
+            }
+            throw DriverClientError.ioKit(operation: operation, result: result)
         }
         self.connection = connection
     }

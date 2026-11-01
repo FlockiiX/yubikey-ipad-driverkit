@@ -22,7 +22,7 @@ struct ContentView: View {
             }
             .navigationTitle("YubiKey USBDriverKit PoC")
         }
-        .onAppear { model.refresh() }
+        .task { await model.monitorConnection() }
     }
 
     private var driverSection: some View {
