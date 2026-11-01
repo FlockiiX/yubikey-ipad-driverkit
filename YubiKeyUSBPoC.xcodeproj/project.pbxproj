@@ -28,6 +28,8 @@
 		A00000000000000000000014 /* DriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B00000000000000000000031 /* DriverKit.framework */; };
 		A00000000000000000000015 /* USBDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B00000000000000000000032 /* USBDriverKit.framework */; };
 		A00000000000000000000016 /* YubiKeyUSBPoC.dext in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = B00000000000000000000041 /* YubiKeyUSBPoC.dext */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A00000000000000000000017 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000051 /* LICENSE */; };
+		A00000000000000000000018 /* THIRD_PARTY_NOTICES in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000052 /* THIRD_PARTY_NOTICES */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +89,8 @@
 		B00000000000000000000040 /* YubiKeyUSBPoC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YubiKeyUSBPoC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00000000000000000000041 /* YubiKeyUSBPoC.dext */ = {isa = PBXFileReference; explicitFileType = "wrapper.driver-extension"; includeInIndex = 0; path = YubiKeyUSBPoC.dext; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00000000000000000000050 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		B00000000000000000000051 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		B00000000000000000000052 /* THIRD_PARTY_NOTICES */ = {isa = PBXFileReference; lastKnownFileType = text; path = THIRD_PARTY_NOTICES; sourceTree = "<group>"; };
 		B00000000000000000000060 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,6 +125,8 @@
 				C00000000000000000000016 /* Config */,
 				C00000000000000000000014 /* Frameworks */,
 				B00000000000000000000050 /* README.md */,
+				B00000000000000000000051 /* LICENSE */,
+				B00000000000000000000052 /* THIRD_PARTY_NOTICES */,
 				C00000000000000000000015 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -298,6 +304,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A00000000000000000000017 /* LICENSE in Resources */,
+				A00000000000000000000018 /* THIRD_PARTY_NOTICES in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
